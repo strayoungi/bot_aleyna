@@ -79,6 +79,27 @@ module.exports = async (req, res) => {
       await bot.sendMessage(chatId, "Broadcast selesai 🚀")
     }
 
+    if (update.message?.text?.startsWith("/remind")) {
+        const chatId = update.message.chat.id
+        const parts = update.message.text.split(" ")
+
+        const dateTime = parts[1] + " " + parts[2]
+        const message = parts.slice(3).join(" ")
+
+        const { data: user } = await supabase
+            .from("users")
+            .select("id")
+            .eq("telegram_id", chatId)
+            .single()
+
+        await supabase.from("reminders").insert({
+            user_id: user.id,
+            message,
+            remind_at: dateTime
+        })
+
+        await bot.sendMessage(chatId, "Reminder disimpan ✅")
+    }
 
     return res.status(200).send("OK")
 
