@@ -3,6 +3,13 @@ const getRawBody = require("raw-body")
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN)
 
+const { createClient } = require("@supabase/supabase-js")
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
 // 🔎 Cek apakah token terbaca saat cold start
 console.log("TOKEN:", process.env.TELEGRAM_BOT_TOKEN)
 
@@ -20,15 +27,18 @@ module.exports = async (req, res) => {
     // 🔎 Lihat update yang masuk dari Telegram
     console.log("UPDATE:", JSON.stringify(update, null, 2))
 
-    if (update.message && update.message.text === "/start") {
-      console.log("START COMMAND DETECTED")
+    if (update.message?.text === "/start") {
+        const chat = update.message.chat
 
-      await bot.sendMessage(
-        update.message.chat.id,
-        "Halo dari Vercel 🚀"
-      )
+        await supabase.from("users").upsert({
+            telegram_id: chat.id,
+            username: chat.username || null,
+        })
 
-      console.log("MESSAGE SENT")
+        await bot.sendMessage(
+            chat.id,
+            "Kamu sudah terdaftar di sistem 🚀"
+        )
     }
 
     return res.status(200).send("OK")
