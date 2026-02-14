@@ -42,6 +42,8 @@ module.exports = async (req, res) => {
     return res.status(200).send("Bot is running")
   }
 
+  console.log("masuk")
+
   try {
     const rawBody = await getRawBody(req)
     const update = JSON.parse(rawBody.toString())
