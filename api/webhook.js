@@ -7,15 +7,20 @@ bot.onText(/\/start/, async (msg) => {
 })
 
 module.exports = async (req, res) => {
-  if (req.method === "POST") {
-    try {
-      await bot.processUpdate(req.body)
-      res.status(200).send("OK")
-    } catch (error) {
-      console.error("Error:", error)
-      res.status(500).send("Error")
-    }
-  } else {
-    res.status(200).send("Bot is running")
+  if (req.method !== "POST") {
+    return res.status(200).send("Bot is running")
+  }
+
+  try {
+    const update = typeof req.body === "string"
+      ? JSON.parse(req.body)
+      : req.body
+
+    await bot.processUpdate(update)
+
+    return res.status(200).send("OK")
+  } catch (error) {
+    console.error("Webhook error:", error)
+    return res.status(500).send("Error")
   }
 }
