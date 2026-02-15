@@ -82,26 +82,46 @@ module.exports = async (req, res) => {
     }
 
     if (update.message?.text?.startsWith("/remind")) {
-        const chatId = update.message.chat.id
-        const parts = update.message.text.split(" ")
+      const chatId = update.message.chat.id
+      const parts = update.message.text.split(" ")
 
-        const dateTime = parts[1] + " " + parts[2]
-        const message = parts.slice(3).join(" ")
+      if (parts.length < 4) {
+        return bot.sendMessage(
+          chatId,
+          "Format salah ❌\nGunakan:\n/remind YYYY-MM-DD HH:mm Pesan"
+        )
+      }
 
-        const { data: user } = await supabase
-            .from("users")
-            .select("id")
-            .eq("telegram_id", chatId)
-            .single()
+      const dateTimeStr = parts[1] + " " + parts[2]
+      const message = parts.slice(3).join(" ")
 
-        await supabase.from("reminders").insert({
-            user_id: user.id,
-            message,
-            remind_at: dateTime
-        })
+      // 🔥 KONVERSI WIB → UTC
+      const remindAt = new Date(dateTimeStr + " GMT+0700").toISOString()
 
-        await bot.sendMessage(chatId, "Reminder disimpan ✅")
+      // Ambil user
+      const { data: user } = await supabase
+        .from("users")
+        .select("id")
+        .eq("telegram_id", chatId)
+        .single()
+
+      if (!user) {
+        return bot.sendMessage(chatId, "User tidak ditemukan ❌")
+      }
+
+      await supabase.from("reminders").insert({
+        user_id: user.id,
+        message,
+        remind_at: remindAt,
+        sent: false
+      })
+
+      await bot.sendMessage(
+        chatId,
+        `Reminder disimpan ✅\n⏰ ${parts[1]} ${parts[2]} WIB`
+      )
     }
+
 
     return res.status(200).send("OK")
 
