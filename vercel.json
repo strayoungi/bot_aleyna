@@ -2,11 +2,5 @@
   "version": 2,
   "routes": [
     { "src": "/webhook", "dest": "api/webhook.js" }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron",
-      "schedule": "* * * * *"
-    }
   ]
 }
