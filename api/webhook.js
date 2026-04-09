@@ -104,8 +104,10 @@ module.exports = async (req, res) => {
           message += `  (belum ada harga)\n`
         }
 
-        message += "\n```"
+        message += "\n"
       })
+
+      message += "```"
 
       await bot.sendMessage(chatId, message)
     }
