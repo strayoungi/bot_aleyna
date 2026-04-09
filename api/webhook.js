@@ -15,6 +15,9 @@ const ADMIN_ID = 8504439872 // ganti dengan telegram ID kamu
 // =========================
 // HELPER FUNCTIONS
 // =========================
+function escapeMarkdownV2(text) {
+  return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, '\\$&')
+}
 
 async function broadcast(message) {
   const { data: users, error } = await supabase
@@ -109,7 +112,9 @@ module.exports = async (req, res) => {
 
       message += "```"
 
-      await bot.sendMessage(chatId, message)
+      await bot.sendMessage(chatId, message, {
+        parse_mode: "MarkdownV2"
+      })
     }
 
 
