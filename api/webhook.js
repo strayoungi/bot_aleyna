@@ -78,7 +78,14 @@ module.exports = async (req, res) => {
     if (text === "/categories") {
       const { data, error } = await supabase
         .from("categories")
-        .select("id, name")
+        .select(`
+          id,
+          name,
+          prices (
+            duration,
+            price
+          )
+        `)
 
       if (error) {
         return await bot.sendMessage(chatId, "Gagal ambil data ❌")
@@ -86,8 +93,18 @@ module.exports = async (req, res) => {
 
       let message = "📂 Daftar Kategori:\n\n"
 
-      data.forEach((item) => {
-        message += `- ${item.name}\n`
+      data.forEach((cat) => {
+        message += `- ${cat.name}\n`
+
+        if (cat.prices.length > 0) {
+          cat.prices.forEach((p) => {
+            message += `  ${p.duration} : ${p.price}\n`
+          })
+        } else {
+          message += `  (belum ada harga)\n`
+        }
+
+        message += "\n"
       })
 
       await bot.sendMessage(chatId, message)
