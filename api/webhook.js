@@ -75,6 +75,24 @@ module.exports = async (req, res) => {
       })
     }
 
+    if (text === "/categories") {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name")
+
+      if (error) {
+        return await bot.sendMessage(chatId, "Gagal ambil data ❌")
+      }
+
+      let message = "📂 Daftar Kategori:\n\n"
+
+      data.forEach((item) => {
+        message += `- ${item.name}\n`
+      })
+
+      await bot.sendMessage(chatId, message)
+    }
+
 
     // ===== /broadcast =====
     if (text.startsWith("/broadcast")) {
