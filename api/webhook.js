@@ -74,7 +74,18 @@ module.exports = async (req, res) => {
 
     if (text === "/pricelist") {
       await bot.sendMessage(chatId, "```\nini pricelistnya\n```", {
-        parse_mode: "MarkdownV2"
+        parse_mode: "MarkdownV2",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: "Option 1", callback_data: "opt1" },
+              { text: "Option 2", callback_data: "opt2" }
+            ],
+            [
+              { text: "Option 3", callback_data: "opt3" }
+            ]
+          ]
+        }
       })
     }
 
