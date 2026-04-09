@@ -91,7 +91,7 @@ module.exports = async (req, res) => {
         return await bot.sendMessage(chatId, "Gagal ambil data ❌")
       }
 
-      let message = "📂 Daftar Kategori:\n\n"
+      let message = "```\n📂 Daftar Kategori:\n\n"
 
       data.forEach((cat) => {
         message += `- ${cat.name}\n`
@@ -104,7 +104,7 @@ module.exports = async (req, res) => {
           message += `  (belum ada harga)\n`
         }
 
-        message += "\n"
+        message += "\n```"
       })
 
       await bot.sendMessage(chatId, message)
