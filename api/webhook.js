@@ -54,6 +54,7 @@ module.exports = async (req, res) => {
 
     const chatId = update.message.chat.id
     const text = update.message.text || ""
+    const username = update.message.chat.username || "Unknown"
 
 
     // ===== /start =====
@@ -61,10 +62,11 @@ module.exports = async (req, res) => {
 
       await supabase.from("users").upsert({
         telegram_id: chatId,
-        username: update.message.chat.username || null
+        username: username || null
       })
 
-      await bot.sendMessage(chatId, "Kamu sudah terdaftar ✅")
+      //await bot.sendMessage(chatId, "Kamu sudah terdaftar ✅")
+      await bot.sendMessage(chatId, `Hallo ${username}!, Kamu sudah terdaftar ✅`)
     }
 
 
