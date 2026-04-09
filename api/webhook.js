@@ -54,7 +54,7 @@ module.exports = async (req, res) => {
 
     const chatId = update.message.chat.id
     const text = update.message.text || ""
-    const username = update.message.chat.username || "Unknown"
+    const username = update.message.from.first_name || "Unknown"
 
 
     // ===== /start =====
