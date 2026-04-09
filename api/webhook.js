@@ -70,7 +70,9 @@ module.exports = async (req, res) => {
     }
 
     if (text === "/pricelist") {
-      await bot.sendMessage(chatId, "```ini pricelistnya```")
+      await bot.sendMessage(chatId, "```\nini pricelistnya\n```", {
+        parse_mode: "MarkdownV2"
+      })
     }
 
 
