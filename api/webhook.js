@@ -66,7 +66,11 @@ module.exports = async (req, res) => {
       })
 
       //await bot.sendMessage(chatId, "Kamu sudah terdaftar ✅")
-      await bot.sendMessage(chatId, `Hallo ${username}!, Kamu sudah terdaftar ✅`)
+      await bot.sendMessage(chatId, `Hallo ${username}! Ada yang bisa dibantu?`)
+    }
+
+    if (text === "/pricelist") {
+      await bot.sendMessage(chatId, "```ini pricelistnya```")
     }
 
 
