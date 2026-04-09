@@ -63,13 +63,22 @@ module.exports = async (req, res) => {
     // ===== /start =====
     if (text === "/start") {
 
-      await supabase.from("users").upsert({
-        telegram_id: chatId,
-        username: username || null
-      })
+      //await supabase.from("users").upsert({
+      //  telegram_id: chatId,
+      //  username: username || null
+      //})
 
       //await bot.sendMessage(chatId, "Kamu sudah terdaftar ✅")
-      await bot.sendMessage(chatId, `Hallo ${username}! Ada yang bisa dibantu?`)
+      await bot.sendMessage(chatId, `Hallo ${username}! Ada yang bisa dibantu?`, {
+        reply_markup: {
+          keyboard: [
+            ["📂 Kategori", "💰 Harga"],
+            ["📞 Kontak"]
+          ],
+          resize_keyboard: true
+        }
+
+      })
     }
 
     if (text === "/pricelist") {
