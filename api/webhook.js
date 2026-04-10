@@ -166,7 +166,9 @@ module.exports = async (req, res) => {
     if (text.startsWith("/search")) {
       //var chatId = update.message.chat.id
       var parts = update.message.text.split(" ")
-      await bot.sendMessage(chatId, "Mencari: " + parts.slice(1).join(" "))
+      await bot.sendMessage(chatId, "Kategori: " + parts[1])
+      await bot.sendMessage(chatId, "Subkategori: " + parts[2])
+      await bot.sendMessage(chatId, "Produk: " + parts.slice(3).join(" "))
       //await bot.sendMessage(chatId, "Fitur pencarian masih dalam pengembangan 🔧")
     }
 
