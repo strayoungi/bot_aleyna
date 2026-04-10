@@ -100,11 +100,11 @@ module.exports = async (req, res) => {
 
     if (text === "/categories") {
       const { data, error } = await supabase
-        .from("categories")
+        .from("store_categories")
         .select(`
           id,
           name,
-          prices (
+          product_prices (
             duration,
             price
           )
