@@ -99,16 +99,31 @@ module.exports = async (req, res) => {
     }
 
     if (text === "/categories" || text === "📂 Kategori") {
+      // const { data, error } = await supabase
+      //   .from("store_categories")
+      //   .select(`
+      //     id,
+      //     name,
+      //     product_prices (
+      //       duration,
+      //       price
+      //     )
+      //   `)
+
       const { data, error } = await supabase
-        .from("store_categories")
-        .select(`
+      .from("store_categories")
+      .select(`
+        id,
+        name,
+        store_subcategories (
           id,
           name,
           product_prices (
             duration,
             price
           )
-        `)
+        )
+      `)
 
       if (error) {
         return await bot.sendMessage(chatId, "Gagal ambil data ❌")
@@ -119,9 +134,16 @@ module.exports = async (req, res) => {
       data.forEach((cat) => {
         message += `- ${cat.name}\n`
 
-        if (cat.product_prices.length > 0) {
-          cat.product_prices.forEach((p) => {
-            message += `  ${p.duration} : ${p.price}\n`
+        if (cat.store_subcategories.length > 0) {
+          cat.store_subcategories.forEach((subcat) => {
+            message += `  - ${subcat.name}\n`
+            if (subcat.product_prices.length > 0) {
+              subcat.product_prices.forEach((p) => {
+                message += `  ${p.duration} : ${p.price}\n`
+              })
+            } else {
+              message += `  (belum ada harga)\n`
+            }
           })
         } else {
           message += `  (belum ada harga)\n`
