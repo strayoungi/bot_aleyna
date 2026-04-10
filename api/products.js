@@ -8,7 +8,7 @@ const supabase = createClient(
 export default async function handler(req, res) {
   if (req.method === "GET") {
     const { data, error } = await supabase
-      .from("price_products")
+      .from("product_prices")
       .select("*");
 
     if (error) return res.status(500).json({ error });
