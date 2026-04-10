@@ -139,10 +139,10 @@ module.exports = async (req, res) => {
             message += `  - ${subcat.name}\n`
             if (subcat.product_prices.length > 0) {
               subcat.product_prices.forEach((p) => {
-                message += `  ${p.duration} : ${p.price}\n`
+                message += `    ${p.duration} : ${p.price}\n`
               })
             } else {
-              message += `  (belum ada harga)\n`
+              message += `    (belum ada harga)\n`
             }
           })
         } else {
