@@ -166,9 +166,36 @@ module.exports = async (req, res) => {
     if (text.startsWith("/search")) {
       //var chatId = update.message.chat.id
       var parts = update.message.text.split(" ")
-      await bot.sendMessage(chatId, "Kategori: " + parts[1])
-      await bot.sendMessage(chatId, "Subkategori: " + parts[2])
-      await bot.sendMessage(chatId, "Produk: " + parts.slice(3).join(" "))
+      var kategori = parts[1]
+      var subkategori = parts[2]
+      var produk = parts.slice(3).join(" ")
+
+      const { data, error } = await supabase
+      .from("product_prices")
+      .select(`
+        price,
+        store_subcategories (
+          name,
+          store_categories (
+            name
+          )
+        )
+      `)
+      .ilike("duration", `%${produk}%`)
+      .ilike("store_subcategories.name", `%${subkategori}%`)
+      .ilike("store_subcategories.store_categories.name", `%${kategori}%`)
+      .order("price", { ascending: true })
+      .limit(1)
+      .maybeSingle()
+
+      await bot.sendMessage(chatId, "Kategori: " + kategori)
+      await bot.sendMessage(chatId, "Subkategori: " + subkategori)
+      await bot.sendMessage(chatId, "Produk: " + produk)
+      if (error || !data) {
+        await bot.sendMessage(chatId, "Data tidak ditemukan")
+      } else {
+        await bot.sendMessage(chatId, `Harga: ${data.price}`)
+      }
       //await bot.sendMessage(chatId, "Fitur pencarian masih dalam pengembangan 🔧")
     }
 
