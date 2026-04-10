@@ -72,8 +72,8 @@ module.exports = async (req, res) => {
       await bot.sendMessage(chatId, `Hallo ${username}! Ada yang bisa dibantu?`, {
         reply_markup: {
           keyboard: [
-            ["📂 Kategori", "💰 Harga"],
-            ["📞 Kontak"]
+            ["📂 Kategori", "💰 Pencarian"],
+            ["📞 Profil Kamu"]
           ],
           resize_keyboard: true
         }
@@ -98,7 +98,7 @@ module.exports = async (req, res) => {
       })
     }
 
-    if (text === "/categories") {
+    if (text === "/categories" || text === "📂 Kategori") {
       const { data, error } = await supabase
         .from("store_categories")
         .select(`
@@ -135,6 +135,10 @@ module.exports = async (req, res) => {
       await bot.sendMessage(chatId, message, {
         parse_mode: "MarkdownV2"
       })
+    }
+
+    if (text === "/search" || text === "💰 Pencarian") {
+      await bot.sendMessage(chatId, "Fitur pencarian masih dalam pengembangan 🔧")
     }
 
 
