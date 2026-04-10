@@ -119,8 +119,8 @@ module.exports = async (req, res) => {
       data.forEach((cat) => {
         message += `- ${cat.name}\n`
 
-        if (cat.prices.length > 0) {
-          cat.prices.forEach((p) => {
+        if (cat.product_prices.length > 0) {
+          cat.product_prices.forEach((p) => {
             message += `  ${p.duration} : ${p.price}\n`
           })
         } else {
